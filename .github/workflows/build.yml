@@ -26,6 +26,7 @@ on:
       serverUrl:
         description: 'Server URL'
         required: true
+        default: "https://remote.mrmeee.dk"
       rid:
         description: 'Server Runtime Identifier'
         required: false
