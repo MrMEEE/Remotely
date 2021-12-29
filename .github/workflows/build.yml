@@ -33,6 +33,60 @@ on:
         default: "linux-x64"
 
 jobs:
+  build-ubuntu:
+
+    runs-on: ubuntu-20.04
+  
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v1.9.0
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Setup NuGet.exe for use with actions
+        uses: NuGet/setup-nuget@v1.0.5
+
+      - name: Set current version
+        shell: bash
+        run: |
+          VersionString=$(git show -s --format=%ci)
+
+          Year=$(date +%Y)
+          Month=$(date +%m)
+          Day=$(date +%d)
+          Hour=$(date +%H)
+          Minute=$(date +%M)
+          CurrentVersion=$(echo $Year.$Month.$Day.$Hour$Minute)
+
+          echo "CurrentVersion=$CurrentVersion" >> $env:GITHUB_ENV
+
+          echo "Setting current version to $CurrentVersion."
+
+      - name: Publish Linux x64 Agent
+        shell: bash
+        run: |
+          VersionString=$(git show -s --format=%ci)
+
+          Year=$(date +%Y)
+          Month=$(date +%m)
+          Day=$(date +%d)
+          Hour=$(date +%H)
+          Minute=$(date +%M)
+          CurrentVersion=$(echo $Year.$Month.$Day.$Hour$Minute"
+          
+          echo "Publishing agent with version $CurrentVersion"
+          dotnet publish /p:Version=$CurrentVersion /p:FileVersion=$CurrentVersion --runtime linux-x64 --configuration Release --output "./Agent/bin/publish/" "./Agent/"
+          tar zcvf "./Agent/bin/Remotely-Linux-x64.zip" "./Agent/bin/publish/*"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: ./Agent/bin/Remotely-Linux-x64.zip
+          name: Linux-Agent-x64  
+
 
   build-mac:
   
