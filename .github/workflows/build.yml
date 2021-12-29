@@ -75,7 +75,7 @@ jobs:
           Day=$(date +%d)
           Hour=$(date +%H)
           Minute=$(date +%M)
-          CurrentVersion=$(echo $Year.$Month.$Day.$Hour$Minute"
+          CurrentVersion=$(echo $Year.$Month.$Day.$Hour$Minute)
           
           echo "Publishing agent with version $CurrentVersion"
           dotnet publish /p:Version=$CurrentVersion /p:FileVersion=$CurrentVersion --runtime linux-x64 --configuration Release --output "./Agent/bin/publish/" "./Agent/"
