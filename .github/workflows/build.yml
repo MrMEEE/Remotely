@@ -78,8 +78,11 @@ jobs:
           CurrentVersion=$(echo $Year.$Month.$Day.$Hour$Minute)
           
           echo "Publishing agent with version $CurrentVersion"
-          dotnet publish /p:Version=$CurrentVersion /p:FileVersion=$CurrentVersion --runtime linux-x64 --configuration Release --output "./Agent/bin/publish/" "./Agent/"
-          tar zcvf ./Agent/bin/Remotely-Linux-x64.zip ./Agent/bin/publish/*
+          mkdir Linux-Agent
+          dotnet publish /p:Version=$CurrentVersion /p:FileVersion=$CurrentVersion --runtime linux-x64 --configuration Release --output "./Linux-Agent/" "./Agent/"
+          dotnet publish /p:Version=$CurrentVersion /p:FileVersion=$CurrentVersion --runtime linux-x64 --configuration Release --output "./Linux-Agent/Desktop/" "./Desktop.XPlat/"
+          cd Linux-Agent
+          tar zcvf ../Agent/bin/Remotely-Linux-x64.zip *
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v2
